@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -37,5 +38,16 @@ public class BookStorageServiceTest {
 
         verify(bookStorageDao).readCatalog();
         Assert.assertEquals(readCatalog, catalog);
+    }
+
+    @Test
+    public void updateCatalogTest() {
+        Catalog catalog = new Catalog();
+
+        when(bookStorageDao.writeCatalog(any())).thenReturn(any());
+
+        bookStorageService.updateCatalog(catalog);
+
+        verify(bookStorageDao).writeCatalog(any());
     }
 }
