@@ -43,7 +43,7 @@ public class BookStorageControllerTest {
     private String catalogToXml(Catalog catalog) throws JAXBException {
         StringWriter sw = new StringWriter();
         Marshaller m = JAXBContext.newInstance(Catalog.class).createMarshaller();
-        m.marshal(new Catalog(), sw);
+        m.marshal(catalog, sw);
         return sw.toString();
     }
 
@@ -68,6 +68,7 @@ public class BookStorageControllerTest {
 
 
         String emptyXmlToSend = catalogToXml(new Catalog());
+        String haveToReturn = catalogToXml(catalog);
 
 
         when(bookStorageService.readCatalog()).thenReturn(catalog);
@@ -75,8 +76,14 @@ public class BookStorageControllerTest {
         mockMvc.perform(put("/changeBook").contentType(MediaType.APPLICATION_XML).content(emptyXmlToSend))
                .andExpect(status().isOk())
                .andExpect(content().contentType(MediaType.APPLICATION_XML))
+               .andExpect(content().string(haveToReturn))
                .andDo(print());
 
         verify(bookStorageService).readCatalog();
+    }
+
+    @Test
+    public void testChangeBook_RequestUpdate() throws Exception {
+
     }
 }
