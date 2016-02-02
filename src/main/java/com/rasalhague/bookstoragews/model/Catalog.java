@@ -29,6 +29,14 @@ public class Catalog {
         return catalog != null ? catalog.hashCode() : 0;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Catalog{");
+        sb.append("catalog=").append(catalog);
+        sb.append('}');
+        return sb.toString();
+    }
+
     @XmlElement(name = "book")
     public void setCatalog(List<Book> catalog) {
         this.catalog = catalog;

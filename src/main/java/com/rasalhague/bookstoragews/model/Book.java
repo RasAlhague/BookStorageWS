@@ -37,6 +37,19 @@ public class Book {
         return result;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Book{");
+        sb.append("id=").append(id);
+        sb.append(", title='").append(title).append('\'');
+        sb.append(", genre='").append(genre).append('\'');
+        sb.append(", price='").append(price).append('\'');
+        sb.append(", publish_date='").append(publish_date).append('\'');
+        sb.append(", description='").append(description).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
+
     public Integer getId() {
         return id;
     }
