@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -87,7 +88,43 @@ public class BookStorageControllerTest {
     }
 
     @Test
-    public void testChangeBook_RequestUpdate() throws Exception {
+    public void testChangeBook_RequestUpdateAndCreate() throws Exception {
+        Catalog catalogToSend = generateTestCatalog();
+        catalogToSend.getCatalog().get(0).setDescription("testChangeBook_RequestUpdateAndCreate");
+        catalogToSend.getCatalog().removeIf(book1 -> book1.getId() != 1);
+        String xmlToSend = catalogToXml(catalogToSend);
 
+        Catalog catalog = generateTestCatalog();
+        catalog.getCatalog().get(0).setDescription("testChangeBook_RequestUpdateAndCreate");
+        String xmlToReceive = catalogToXml(catalog);
+
+        when(bookStorageService.updateCatalog(catalogToSend)).thenReturn(catalog);
+
+        mockMvc.perform(put("/changeBook").contentType(MediaType.APPLICATION_XML).content(xmlToSend))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_XML))
+               .andExpect(content().string(xmlToReceive))
+               .andDo(print());
+
+        verify(bookStorageService).updateCatalog(catalog);
+    }
+
+    @Test
+    public void testChangeBook_RequestDelete() throws Exception {
+        Catalog catalogToSend = generateTestCatalog();
+        String xmlToSend = catalogToXml(catalogToSend);
+
+        Catalog catalogToReceive = new Catalog();
+        String xmlToReceive = catalogToXml(catalogToReceive);
+
+        when(bookStorageService.deleteBooks(catalogToSend)).thenReturn(catalogToReceive);
+
+        mockMvc.perform(delete("/changeBook").contentType(MediaType.APPLICATION_XML).content(xmlToSend))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_XML))
+               .andExpect(content().string(xmlToReceive))
+               .andDo(print());
+
+        verify(bookStorageService).deleteBooks(catalogToSend);
     }
 }
