@@ -47,29 +47,33 @@ public class BookStorageControllerTest {
         return sw.toString();
     }
 
-    @Test
-    public void testChangeBook_RequestEmptyXML() throws Exception {
+    private Catalog generateTestCatalog() {
         ArrayList<Book> list = new ArrayList<>();
 
         Book book = new Book();
         book.setId(1);
-        book.setDescription("d");
-        book.setGenre("g");
+        book.setDescription("TestCatalog");
+        book.setGenre("TestCatalog");
         list.add(book);
 
         book = new Book();
         book.setId(2);
-        book.setDescription("dd");
-        book.setGenre("gg");
+        book.setDescription("TestCatalog");
+        book.setGenre("TestCatalog");
         list.add(book);
 
         Catalog catalog = new Catalog();
         catalog.setCatalog(list);
 
+        return catalog;
+    }
+
+    @Test
+    public void testChangeBook_RequestEmptyXML() throws Exception {
+        Catalog catalog = generateTestCatalog();
 
         String emptyXmlToSend = catalogToXml(new Catalog());
         String haveToReturn = catalogToXml(catalog);
-
 
         when(bookStorageService.readCatalog()).thenReturn(catalog);
 
