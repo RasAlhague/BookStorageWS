@@ -2,11 +2,12 @@ package com.rasalhague.bookstoragews.model;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
 import java.util.List;
 
 @XmlRootElement
 public class Catalog {
-    List<Book> catalog;
+    List<Book> catalog = new ArrayList<>();
 
     public List<Book> getCatalog() {
         return catalog;
