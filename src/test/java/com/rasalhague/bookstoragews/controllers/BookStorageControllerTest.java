@@ -67,12 +67,15 @@ public class BookStorageControllerTest {
         catalog.setCatalog(list);
 
 
+        String emptyXmlToSend = catalogToXml(new Catalog());
+
+
         when(bookStorageService.readCatalog()).thenReturn(catalog);
 
-        mockMvc.perform(put("/changeBook").contentType(MediaType.APPLICATION_XML).content(catalogToXml(new Catalog())))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_XML))
-                .andDo(print());
+        mockMvc.perform(put("/changeBook").contentType(MediaType.APPLICATION_XML).content(emptyXmlToSend))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_XML))
+               .andDo(print());
 
         verify(bookStorageService).readCatalog();
     }
