@@ -106,7 +106,7 @@ public class BookStorageControllerTest {
                .andExpect(content().string(xmlToReceive))
                .andDo(print());
 
-        verify(bookStorageService).updateCatalog(catalog);
+        verify(bookStorageService).updateCatalog(catalogToSend);
     }
 
     @Test
