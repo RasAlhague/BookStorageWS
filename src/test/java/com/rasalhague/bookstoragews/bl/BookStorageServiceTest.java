@@ -52,4 +52,18 @@ public class BookStorageServiceTest {
 
         verify(bookStorageDao).writeCatalog(any());
     }
+
+    @Test
+    public void removeCatalogTest() {
+        Catalog actualCatalog = Helper.generateTestCatalog();
+        Catalog emptyCatalog = new Catalog();
+
+        when(bookStorageDao.readCatalog()).thenReturn(actualCatalog);
+        when(bookStorageDao.writeCatalog(emptyCatalog)).thenReturn(emptyCatalog);
+
+        Catalog deleteBooks = bookStorageService.deleteBooks(actualCatalog);
+
+        Assert.assertEquals(actualCatalog, deleteBooks);
+        verify(bookStorageDao).writeCatalog(any(Catalog.class));
+    }
 }
