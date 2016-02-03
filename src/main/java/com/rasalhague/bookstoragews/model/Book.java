@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlElement;
 
 public class Book {
     String id;
+    String author;
     String title;
     String genre;
     String price;
@@ -58,6 +59,15 @@ public class Book {
     @XmlAttribute
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    @XmlElement
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public String getTitle() {
