@@ -2,9 +2,12 @@ package com.rasalhague.bookstoragews.bl.impl;
 
 import com.rasalhague.bookstoragews.bl.BookStorageService;
 import com.rasalhague.bookstoragews.dao.BookStorageDao;
+import com.rasalhague.bookstoragews.model.Book;
 import com.rasalhague.bookstoragews.model.Catalog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class BookStorageServiceImpl implements BookStorageService {
@@ -13,16 +16,53 @@ public class BookStorageServiceImpl implements BookStorageService {
 
     @Override
     public Catalog readCatalog() {
-        return null;
+        return bookStorageDao.readCatalog();
     }
 
     @Override
     public Catalog updateCatalog(Catalog catalog) {
-        return null;
+        Catalog wholeCatalog = bookStorageDao.readCatalog();
+
+        catalog.getCatalog()
+               .parallelStream()
+               .forEach(book -> {
+                   if (!updateBookIfExist(wholeCatalog, book)) {
+                       createBookInCatalog(wholeCatalog, book);
+                   }
+               });
+
+        bookStorageDao.writeCatalog(wholeCatalog);
+
+        return wholeCatalog;
     }
 
     @Override
     public Catalog deleteBooks(Catalog catalog) {
         return null;
+    }
+
+    private boolean updateBookIfExist(Catalog catalogToUpdate, Book bookToUpdate) {
+        final boolean[] isUpdated = {false};
+        List<Book> catalog = catalogToUpdate.getCatalog();
+        catalog.parallelStream()
+               .forEach(book -> {
+                   if (book.getId().equals(bookToUpdate.getId())) {
+                       book.setDescription(bookToUpdate.getDescription());
+                       book.setGenre(bookToUpdate.getGenre());
+                       book.setPrice(bookToUpdate.getPrice());
+                       book.setPublish_date(bookToUpdate.getPublish_date());
+                       book.setTitle(bookToUpdate.getTitle());
+
+                       isUpdated[0] = true;
+                   }
+               });
+
+        return isUpdated[0];
+    }
+
+    private Catalog createBookInCatalog(Catalog catalogToUpdate, Book bookToAdd) {
+        catalogToUpdate.getCatalog().add(bookToAdd);
+
+        return catalogToUpdate;
     }
 }
