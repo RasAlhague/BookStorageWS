@@ -7,6 +7,7 @@ import com.rasalhague.bookstoragews.model.Catalog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Iterator;
 import java.util.List;
 
 @Component
@@ -38,7 +39,18 @@ public class BookStorageServiceImpl implements BookStorageService {
 
     @Override
     public Catalog deleteBooks(Catalog catalog) {
-        return null;
+        Catalog wholeCatalog = bookStorageDao.readCatalog();
+        for (Book book : catalog.getCatalog()) {
+            for (Iterator<Book> it = wholeCatalog.getCatalog().iterator(); it.hasNext(); ) {
+                Book potentialBookToDel = it.next();
+                if (book.getId().equals(potentialBookToDel.getId())) {
+                    it.remove();
+                }
+            }
+        }
+        bookStorageDao.writeCatalog(wholeCatalog);
+
+        return wholeCatalog;
     }
 
     private boolean updateBookIfExist(Catalog catalogToUpdate, Book bookToUpdate) {
