@@ -24,7 +24,7 @@ public class BookStorageServiceImpl implements BookStorageService {
         Catalog wholeCatalog = bookStorageDao.readCatalog();
 
         catalog.getCatalog()
-               .parallelStream()
+               .stream() // parallel stream will produce ConcurrentModEx
                .forEach(book -> {
                    if (!updateBookIfExist(wholeCatalog, book)) {
                        createBookInCatalog(wholeCatalog, book);
