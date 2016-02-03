@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.io.IOException;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -97,13 +98,18 @@ public class IntegrationTest {
 
     @Test
     public void controller_removeCatalogTest() throws Exception {
-        Catalog actualCatalog = Helper.getDefaultCatalog();
+        Catalog catalogToRemove = Helper.getDefaultCatalog();
+        int elementToSave = 0;
+        catalogToRemove.getCatalog().remove(elementToSave);
 
-        mockMvc.perform(put("/changeBook").contentType(MediaType.APPLICATION_XML)
-                                          .content(Helper.catalogToXml(new Catalog())))
+        Catalog haveToReceive = Helper.getDefaultCatalog();
+        haveToReceive.getCatalog().removeAll(catalogToRemove.getCatalog());
+
+        mockMvc.perform(delete("/changeBook").contentType(MediaType.APPLICATION_XML)
+                                             .content(Helper.catalogToXml(catalogToRemove)))
                .andExpect(status().isOk())
                .andExpect(content().contentType(MediaType.APPLICATION_XML))
-               .andExpect(content().string(Helper.catalogToXml(actualCatalog)))
+               .andExpect(content().string(Helper.catalogToXml(haveToReceive)))
                .andDo(print());
     }
 }
