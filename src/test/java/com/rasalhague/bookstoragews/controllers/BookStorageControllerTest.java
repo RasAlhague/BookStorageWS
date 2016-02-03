@@ -57,7 +57,7 @@ public class BookStorageControllerTest {
     public void testChangeBook_RequestUpdateAndCreate() throws Exception {
         Catalog catalogToSend = Helper.generateTestCatalog();
         catalogToSend.getCatalog().get(0).setDescription("testChangeBook_RequestUpdateAndCreate");
-        catalogToSend.getCatalog().removeIf(book1 -> book1.getId() != 1);
+        catalogToSend.getCatalog().removeIf(book1 -> !book1.getId().equals("1"));
         String xmlToSend = Helper.catalogToXml(catalogToSend);
 
         Catalog catalog = Helper.generateTestCatalog();

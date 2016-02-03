@@ -1,9 +1,10 @@
 package com.rasalhague.bookstoragews.model;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 public class Book {
-    Integer id;
+    String id;
     String title;
     String genre;
     String price;
@@ -50,12 +51,12 @@ public class Book {
         return sb.toString();
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    @XmlElement
-    public void setId(Integer id) {
+    @XmlAttribute
+    public void setId(String id) {
         this.id = id;
     }
 
