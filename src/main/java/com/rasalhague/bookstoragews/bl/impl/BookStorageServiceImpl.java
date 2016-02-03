@@ -4,16 +4,43 @@ import com.rasalhague.bookstoragews.bl.BookStorageService;
 import com.rasalhague.bookstoragews.dao.BookStorageDao;
 import com.rasalhague.bookstoragews.model.Book;
 import com.rasalhague.bookstoragews.model.Catalog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Iterator;
 import java.util.List;
 
 @Component
 public class BookStorageServiceImpl implements BookStorageService {
+    private final Logger logger = LoggerFactory.getLogger(BookStorageServiceImpl.class);
+
     @Autowired
     BookStorageDao bookStorageDao;
+
+    @PostConstruct
+    private void init() {
+        // Also will be good to check existing storage on unmarshaling to prevent fake
+        try {
+            Path pathToBookStorage = Paths.get("BookStorage.xml");
+            if (!Files.exists(pathToBookStorage)) {
+                Files.copy(this.getClass()
+                               .getClassLoader()
+                               .getResourceAsStream("EmptyBookStorage.xml"),
+                           pathToBookStorage,
+                           StandardCopyOption.REPLACE_EXISTING);
+            }
+        } catch (IOException e) {
+            logger.warn(e.getMessage());
+        }
+    }
 
     @Override
     public Catalog readCatalog() {
