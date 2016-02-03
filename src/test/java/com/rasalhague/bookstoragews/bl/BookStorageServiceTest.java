@@ -1,5 +1,6 @@
 package com.rasalhague.bookstoragews.bl;
 
+import com.rasalhague.bookstoragews.Helper;
 import com.rasalhague.bookstoragews.bl.impl.BookStorageServiceImpl;
 import com.rasalhague.bookstoragews.dao.BookStorageDao;
 import com.rasalhague.bookstoragews.model.Catalog;
@@ -42,11 +43,12 @@ public class BookStorageServiceTest {
 
     @Test
     public void updateCatalogTest() {
-        Catalog catalog = new Catalog();
+        Catalog testCatalog = Helper.generateTestCatalog();
 
-        when(bookStorageDao.writeCatalog(any())).thenReturn(any());
+        when(bookStorageDao.readCatalog()).thenReturn(new Catalog());
+        when(bookStorageDao.writeCatalog(testCatalog)).thenReturn(testCatalog);
 
-        bookStorageService.updateCatalog(catalog);
+        bookStorageService.updateCatalog(testCatalog);
 
         verify(bookStorageDao).writeCatalog(any());
     }
