@@ -1,3 +1,22 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?><catalog><book id="bk103"><author>Corets, Eva</author><description>After the collapse of a nanotechnology 
-      society in England, the young survivors lay the 
-      foundation for a new society.</description><genre>Fantasy</genre><price>5.95</price><publish_date>2000-11-17</publish_date><title>Maeve Ascendant</title></book></catalog>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<catalog>
+    <book id="bk101">
+        <description>
+            An in-depth look at creating applications with XML.
+        </description>
+        <genre>Computer</genre>
+        <price>44.95</price>
+        <publish_date>2000-10-01</publish_date>
+        <title>XML Developer's Guide</title>
+    </book>
+    <book id="bk102">
+        <description>
+            A former architect battles corporate zombies, an evil sorceress, and her own childhood to become queen of
+            the world.
+        </description>
+        <genre>Fantasy</genre>
+        <price>5.95</price>
+        <publish_date>2000-12-16</publish_date>
+        <title>Midnight Rain</title>
+    </book>
+</catalog>

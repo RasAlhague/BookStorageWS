@@ -112,4 +112,29 @@ public class IntegrationTest {
                .andExpect(content().string(Helper.catalogToXml(haveToReceive)))
                .andDo(print());
     }
+
+    @Test
+    public void controller_loadTest() throws Exception {
+        Catalog catalog = Helper.getDefaultCatalog();
+        for (int i = 0; i < 100; i++) {
+            catalog.getCatalog().get(0).setTitle(String.valueOf(i));
+            String expect = Helper.catalogToXml(catalog);
+            new Thread(() -> {
+                try {
+                    mockMvc.perform(put("/changeBook").contentType(MediaType.APPLICATION_XML)
+                                                      .content(Helper.catalogToXml(catalog)))
+                           .andExpect(status().isOk())
+                           .andExpect(content().contentType(MediaType.APPLICATION_XML))
+                           .andExpect(content().string(expect));
+
+                    mockMvc.perform(put("/changeBook").contentType(MediaType.APPLICATION_XML)
+                                                      .content(Helper.catalogToXml(new Catalog())))
+                           .andExpect(status().isOk())
+                           .andExpect(content().contentType(MediaType.APPLICATION_XML));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).run();
+        }
+    }
 }

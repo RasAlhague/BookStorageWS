@@ -17,15 +17,15 @@ public class BookStorageDaoImpl implements BookStorageDao {
     private final Logger logger = LoggerFactory.getLogger(BookStorageDaoImpl.class);
     private final String bookStoragePath = "BookStorage.xml";
 
-    private Unmarshaller um;
-    private Marshaller m;
+    private JAXBContext ctx;
     private File file;
 
+    /**
+     * https://jaxb.java.net/guide/Performance_and_thread_safety.html
+     */
     public BookStorageDaoImpl() {
         try {
-            JAXBContext ctx = JAXBContext.newInstance(Catalog.class);
-            um = ctx.createUnmarshaller();
-            m = ctx.createMarshaller();
+            ctx = JAXBContext.newInstance(Catalog.class);
             file = new File(bookStoragePath);
         } catch (JAXBException e) {
             logger.error(e.getMessage());
@@ -36,6 +36,7 @@ public class BookStorageDaoImpl implements BookStorageDao {
     public Catalog readCatalog() {
         Catalog catalog = new Catalog();
         try {
+            Unmarshaller um = ctx.createUnmarshaller();
             catalog = (Catalog) um.unmarshal(file);
         } catch (JAXBException e) {
             logger.error(e.getMessage());
@@ -46,6 +47,7 @@ public class BookStorageDaoImpl implements BookStorageDao {
     @Override
     public Catalog writeCatalog(Catalog catalog) {
         try {
+            Marshaller m = ctx.createMarshaller();
             m.marshal(catalog, file);
         } catch (JAXBException e) {
             logger.error(e.getMessage());
