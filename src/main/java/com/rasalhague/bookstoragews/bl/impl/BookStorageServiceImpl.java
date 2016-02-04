@@ -86,11 +86,16 @@ public class BookStorageServiceImpl implements BookStorageService {
         catalog.parallelStream()
                .forEach(book -> {
                    if (book.getId().equals(bookToUpdate.getId())) {
-                       book.setDescription(bookToUpdate.getDescription());
-                       book.setGenre(bookToUpdate.getGenre());
-                       book.setPrice(bookToUpdate.getPrice());
-                       book.setPublish_date(bookToUpdate.getPublish_date());
-                       book.setTitle(bookToUpdate.getTitle());
+                       if (bookToUpdate.getDescription() != null)
+                           book.setDescription(bookToUpdate.getDescription());
+                       if (bookToUpdate.getGenre() != null)
+                           book.setGenre(bookToUpdate.getGenre());
+                       if (bookToUpdate.getPrice() != null)
+                           book.setPrice(bookToUpdate.getPrice());
+                       if (bookToUpdate.getPublish_date() != null)
+                           book.setPublish_date(bookToUpdate.getPublish_date());
+                       if (bookToUpdate.getTitle() != null)
+                           book.setTitle(bookToUpdate.getTitle());
 
                        isUpdated[0] = true;
                    }
